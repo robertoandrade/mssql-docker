@@ -4,8 +4,8 @@ build_script:
   - ps: .\windows\build.ps1
 
 deploy_script:
-  - docker login --username "$Env:DOCKER_USERNAME" --password "$Env:DOCKER_PASSWORD"
-  - docker push $Env:DOCKER_TAG
+  - ps: docker login --username "$Env:DOCKER_USERNAME" --password "$Env:DOCKER_PASSWORD"
+  - ps: docker push $Env:DOCKER_TAG
 
 clone_depth: 1
 test: off
