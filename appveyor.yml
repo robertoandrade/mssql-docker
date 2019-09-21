@@ -5,4 +5,4 @@ build_script:
 
 clone_depth: 1
 test: off
-deploy: off
+deploy: on
