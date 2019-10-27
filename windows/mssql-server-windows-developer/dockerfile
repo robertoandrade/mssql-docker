@@ -30,4 +30,5 @@ RUN stop-service MSSQLSERVER ; \
 
 HEALTHCHECK CMD [ "sqlcmd", "-Q", "select 1" ]
 
+ENTRYPOINT ["powershell"]
 CMD .\start -sa_password $env:sa_password -ACCEPT_EULA $env:ACCEPT_EULA -attach_dbs \"$env:attach_dbs\" -Verbose
