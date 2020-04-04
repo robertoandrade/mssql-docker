@@ -6,6 +6,7 @@ pushd $PSScriptRoot
 # }
 
 $tag = "mssql-server-windows-developer"
-docker build -t robertoandrade/$tag-ssis $tag
+cmd ver
+docker build -t robertoandrade/$tag-ssis-ssrs $tag
 
 popd
