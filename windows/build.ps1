@@ -6,7 +6,7 @@ pushd $PSScriptRoot
 # }
 
 $tag = "mssql-server-windows-developer"
-Get-ComputerInfo | select WindowsProductName, WindowsVersion, OsHardwareAbstractionLayer
+cmd /c ver
 
 docker build -t robertoandrade/$tag-ssis-ssrs $tag
 
