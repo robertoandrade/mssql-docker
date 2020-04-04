@@ -24,7 +24,7 @@ RUN Invoke-WebRequest -Uri $env:box -OutFile SQL.box ; \
         Remove-Item -Recurse -Force SQL.exe, SQL.box, setup
 
 # patching with CU19
-ENV exe "https://download.microsoft.com/download/C/4/F/C4F908C9-98ED-4E5F-88D5-7D6A5004AEBD/SQLServer2017-KB4535007-x64.exe"
+ENV exe "http://download.windowsupdate.com/c/msdownload/update/software/updt/2020/02/sqlserver2017-kb4535007-x64_6c883a7a36a1029066e2be6ab9eeab0967804580.exe"
 RUN Invoke-WebRequest -Uri $env:exe -OutFile SQL.exe ; \
         Start-Process -Wait -FilePath .\SQL.exe -ArgumentList /q, /ACTION=Patch, /INSTANCENAME=MSSQLSERVER, /IACCEPTSQLSERVERLICENSETERMS ; \
         Remove-Item -Recurse -Force SQL.exe
@@ -32,7 +32,7 @@ RUN Invoke-WebRequest -Uri $env:exe -OutFile SQL.exe ; \
 # installing SSRS
 ENV ssrs "https://download.microsoft.com/download/E/6/4/E6477A2A-9B58-40F7-8AD6-62BB8491EA78/SQLServerReportingServices.exe"
 RUN Invoke-WebRequest -Uri $env:ssrs -OutFile SSRS.exe ; \
-    Start-Process -Wait -FilePath .\SSRS.exe -ArgumentList /quiet, /norestart, /Edition=Dev, /IAcceptLicenseTerms, /log $env:TEMP\ssrs-setup.log ; \
+    Start-Process -Wait -FilePath .\SSRS.exe -ArgumentList /quiet, /norestart, /Edition=Dev, /IAcceptLicenseTerms, /log=$env:TEMP\ssrs-setup.log ; \
     Remove-Item -Recurse -Force SSRS.exe
 
 RUN stop-service MSSQLSERVER ; \
