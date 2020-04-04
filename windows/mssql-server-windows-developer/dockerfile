@@ -29,6 +29,12 @@ RUN Invoke-WebRequest -Uri $env:exe -OutFile SQL.exe ; \
         Start-Process -Wait -FilePath .\SQL.exe -ArgumentList /q, /ACTION=Patch, /INSTANCENAME=MSSQLSERVER, /IACCEPTSQLSERVERLICENSETERMS ; \
         Remove-Item -Recurse -Force SQL.exe
 
+# installing SSRS
+ENV ssrs "https://download.microsoft.com/download/E/6/4/E6477A2A-9B58-40F7-8AD6-62BB8491EA78/SQLServerReportingServices.exe"
+RUN Invoke-WebRequest -Uri $env:ssrs -OutFile SSRS.exe ; \
+    .\SSRS.exe /quiet /norestart /EditionUpgrade /Edition=Dev /IAcceptLicenseTerms /log %TEMP%\ssrs-setup.log ; \
+    Remove-Item -Recurse -Force SSRS.exe
+
 RUN stop-service MSSQLSERVER ; \
         set-itemproperty -path 'HKLM:\software\microsoft\microsoft sql server\mssql14.MSSQLSERVER\mssqlserver\supersocketnetlib\tcp\ipall' -name tcpdynamicports -value '' ; \
         set-itemproperty -path 'HKLM:\software\microsoft\microsoft sql server\mssql14.MSSQLSERVER\mssqlserver\supersocketnetlib\tcp\ipall' -name tcpport -value 1433 ; \
