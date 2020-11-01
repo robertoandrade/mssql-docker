@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/framework/aspnet:4.7.2-windowsservercore-ltsc2016
+FROM mcr.microsoft.com/dotnet/framework/aspnet:4.8-windowsservercore-ltsc2016
 
 LABEL maintainer "Perry Skountrianos"
 
@@ -23,13 +23,13 @@ RUN Invoke-WebRequest -Uri $env:box -OutFile SQL.box ; \
         .\setup\setup.exe /q /ACTION=Install /INSTANCENAME=MSSQLSERVER /FEATURES=SQLEngine,IS /UPDATEENABLED=0 /SQLSVCACCOUNT='NT AUTHORITY\System' /SQLSYSADMINACCOUNTS='BUILTIN\ADMINISTRATORS' /TCPENABLED=1 /NPENABLED=0 /IACCEPTSQLSERVERLICENSETERMS ; \
         Remove-Item -Recurse -Force SQL.exe, SQL.box, setup
 
-# patching with CU19
-ENV exe "http://download.windowsupdate.com/c/msdownload/update/software/updt/2020/02/sqlserver2017-kb4535007-x64_6c883a7a36a1029066e2be6ab9eeab0967804580.exe"
+# patching with CU22. Check additional updates at https://www.catalog.update.microsoft.com/Home.aspx
+ENV exe "http://download.windowsupdate.com/d/msdownload/update/software/updt/2020/09/sqlserver2017-kb4577467-x64_8848761ca6ccec75d62aa0ea221bfa3ca54ad105.exe"
 RUN Invoke-WebRequest -Uri $env:exe -OutFile SQL.exe ; \
         Start-Process -Wait -FilePath .\SQL.exe -ArgumentList /q, /ACTION=Patch, /INSTANCENAME=MSSQLSERVER, /IACCEPTSQLSERVERLICENSETERMS ; \
         Remove-Item -Recurse -Force SQL.exe
 
-# installing SSRS
+# installing SSRS. Check additional updates at https://www.microsoft.com/en-us/download/details.aspx?id=55252
 ENV ssrs "https://download.microsoft.com/download/E/6/4/E6477A2A-9B58-40F7-8AD6-62BB8491EA78/SQLServerReportingServices.exe"
 RUN Invoke-WebRequest -Uri $env:ssrs -OutFile SSRS.exe ; \
     Start-Process -Wait -FilePath .\SSRS.exe -ArgumentList /quiet, /norestart, /Edition=Dev, /IAcceptLicenseTerms, /log=$env:TEMP\ssrs-setup.log ; \
